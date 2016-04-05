@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">SenserTest</string>
+    <string name="label_linear_acc">LinearAcc:</string>
+    <string name="placeholder">placeholder</string>
+    <string name="label_distance">distance</string>
+    <string name="label_speed">speed</string>
+    <string name="label_sample_rate">Sample Rate</string>
+    <string name="label_mag">magnetic</string>
+</resources>
