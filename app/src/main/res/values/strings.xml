@@ -6,4 +6,8 @@
     <string name="label_speed">speed</string>
     <string name="label_sample_rate">Sample Rate</string>
     <string name="label_mag">magnetic</string>
+    <string name="label_step">Step</string>
+    <string name="label_step_detector">Step by Detector</string>
+    <string name="label_rotation">Roration</string>
+    <string name="label_angular">Angular speed</string>
 </resources>
