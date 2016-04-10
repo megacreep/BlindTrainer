@@ -3,6 +3,7 @@
     package="com.megacreep.sensertest">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 
     <application

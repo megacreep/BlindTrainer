@@ -11,6 +11,10 @@ import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.megacreep.sensertest.media.MusicPlayer;
+import com.megacreep.sensertest.sensor.StepDetector;
+import com.megacreep.sensertest.sensor.StepDetectorListener;
+
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,12 +29,22 @@ public class MainActivity extends AppCompatActivity {
 
     private SensorEventListener mSensorListener;
 
+    private StepDetector mStepDetector;
+    private StepDetectorListener mStepDetectorListener = new StepDetectorListener() {
+        @Override
+        public void onStepEvent() {
+            mPlayer.next();
+        }
+    };
+
+    private MusicPlayer mPlayer;
+
     private TextView mTextViewAccValue;
     private TextView mTextViewSpeed;
     private TextView mTextViewDistance;
     private TextView mTextViewMag;
     private TextView mTextViewStep;
-    private TextView mTextviewStepDetector;
+    private TextView mTextViewStepDetector;
     private TextView mTextViewRotation;
     private TextView mTextViewAngular;
 
@@ -50,12 +64,19 @@ public class MainActivity extends AppCompatActivity {
         mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         mGyroscopeSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
+        try {
+            mStepDetector = new StepDetector(mSensorManager);
+            mStepDetector.addStepListener(mStepDetectorListener);
+        } catch (StepDetector.StepDetectorNotExistException e) {
+            Log.d("megacreep", "This device don't support step detector sensor");
+        }
+
         mTextViewAccValue = (TextView) this.findViewById(R.id.tvLinearAccValue);
         mTextViewSpeed = (TextView) this.findViewById(R.id.tvSpeed);
         mTextViewDistance = (TextView) this.findViewById(R.id.tvDistance);
         mTextViewMag = (TextView) this.findViewById(R.id.tvMag);
         mTextViewStep = (TextView) this.findViewById(R.id.tvStep);
-        mTextviewStepDetector = (TextView) this.findViewById(R.id.tvStepDetector);
+        mTextViewStepDetector = (TextView) this.findViewById(R.id.tvStepDetector);
         mTextViewRotation = (TextView) this.findViewById(R.id.tvRotation);
         mTextViewAngular = (TextView) this.findViewById(R.id.tvAngular);
 
@@ -86,13 +107,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mPlayer = new MusicPlayer(
+                getApplicationContext(),
+                new int[]{
+                        12, 12, 19, 19, 21, 21, 19,
+                        17, 17, 16, 16, 14, 14, 12,
+                }
+        );
     }
 
     private void rebindListener() {
         if (mSensorListener != null)
             mSensorManager.unregisterListener(mSensorListener);
 
-        mSensorListener = new AccelerometerListener();
+        mSensorListener = new MySensorEventListener();
         boolean result;
         result = mSensorManager.registerListener(mSensorListener, mAccSensor, mEventListenerSampleRate);
         if (!result) {
@@ -121,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (mStepDetectorSensor == null) {
-            mTextviewStepDetector.setText("Not Supported");
+            mTextViewStepDetector.setText("Not Supported");
         } else {
             result = mSensorManager.registerListener(mSensorListener, mStepDetectorSensor, SensorManager.SENSOR_DELAY_UI);
             if (!result) {
@@ -137,16 +165,21 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         rebindListener();
+        mStepDetector.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(mSensorListener);
-        mSensorListener = null;
+        if (mSensorListener != null) {
+            mSensorManager.unregisterListener(mSensorListener);
+            mSensorListener = null;
+        }
+
+        mStepDetector.stop();
     }
 
-    private class AccelerometerListener implements SensorEventListener {
+    private class MySensorEventListener implements SensorEventListener {
         private static final float NS2S = 1.0f / 1000000000.0f;
         private static final float EPSILON = 0.1f;
         private static final float ALPHA = 0.8f;
@@ -203,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 case Sensor.TYPE_STEP_DETECTOR:
                     mStepCounter++;
-                    mTextviewStepDetector.setText(Integer.toString(mStepCounter));
+                    mTextViewStepDetector.setText(Integer.toString(mStepCounter));
                     return;
                 case Sensor.TYPE_GYROSCOPE:
                     // This timestep's delta rotation to be multiplied by the current rotation
