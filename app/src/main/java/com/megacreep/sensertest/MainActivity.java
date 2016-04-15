@@ -7,25 +7,38 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.megacreep.sensertest.media.MusicPlayer;
 import com.megacreep.sensertest.sensor.StepDetector;
 import com.megacreep.sensertest.sensor.StepDetectorListener;
+import com.megacreep.sensertest.util.FileUtils;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static int[] SENSOR_TYPE_LIST = new int[] {
+            Sensor.TYPE_ACCELEROMETER,
+            Sensor.TYPE_MAGNETIC_FIELD,
+            Sensor.TYPE_STEP_COUNTER,
+            Sensor.TYPE_STEP_DETECTOR,
+            Sensor.TYPE_ROTATION_VECTOR,
+            Sensor.TYPE_GYROSCOPE,
+    };
+
     private SensorManager mSensorManager;
-    private Sensor mAccSensor;
-    private Sensor mMagSensor;
-    private Sensor mStepSensor;
-    private Sensor mStepDetectorSensor;
-    private Sensor mRotationSensor;
-    private Sensor mGyroscopeSensor;
+    private List<Sensor> mSensorList = new ArrayList<>();
 
     private SensorEventListener mSensorListener;
 
@@ -48,28 +61,29 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextViewRotation;
     private TextView mTextViewAngular;
 
+    private CompoundButton.OnCheckedChangeListener mControlListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if (isChecked) {
+                start();
+            } else {
+                stop();
+            }
+        }
+    };
+
     private long mStartTime;
     private int mEventListenerSampleRate = SensorManager.SENSOR_DELAY_UI;
+
+    private Map<Sensor, FileUtils.CSVFileWriter> mDataFileWriters
+            = new HashMap<Sensor, FileUtils.CSVFileWriter>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mAccSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mMagSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        mStepSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        mStepDetectorSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-        mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-        mGyroscopeSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-
-        try {
-            mStepDetector = new StepDetector(mSensorManager);
-            mStepDetector.addStepListener(mStepDetectorListener);
-        } catch (StepDetector.StepDetectorNotExistException e) {
-            Log.d("megacreep", "This device don't support step detector sensor");
-        }
+        prepareSensors();
 
         mTextViewAccValue = (TextView) this.findViewById(R.id.tvLinearAccValue);
         mTextViewSpeed = (TextView) this.findViewById(R.id.tvSpeed);
@@ -79,6 +93,9 @@ public class MainActivity extends AppCompatActivity {
         mTextViewStepDetector = (TextView) this.findViewById(R.id.tvStepDetector);
         mTextViewRotation = (TextView) this.findViewById(R.id.tvRotation);
         mTextViewAngular = (TextView) this.findViewById(R.id.tvAngular);
+
+        ToggleButton btnControl = (ToggleButton) this.findViewById(R.id.btnControl);
+        btnControl.setOnCheckedChangeListener(mControlListener);
 
         SeekBar seekBar = (SeekBar) this.findViewById(R.id.seekBar);
         final TextView tvSampleRate = (TextView) this.findViewById(R.id.tvSampleRate);
@@ -103,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                rebindListener();
+                start();
             }
         });
 
@@ -116,67 +133,88 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    private void rebindListener() {
+    private void prepareSensors() {
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        for (int sensorType : SENSOR_TYPE_LIST) {
+            Sensor sensor = mSensorManager.getDefaultSensor(sensorType);
+            if (sensor == null) {
+                Log.d("megacreep", sensorType + " not supported");
+            } else {
+                mSensorList.add(sensor);
+            }
+        }
+
+        try {
+            mStepDetector = new StepDetector(mSensorManager);
+            mStepDetector.addStepListener(mStepDetectorListener);
+        } catch (StepDetector.StepDetectorNotExistException e) {
+            Log.d("megacreep", "This device don't support step detector sensor");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stop();
+    }
+
+    private void start() {
         if (mSensorListener != null)
             mSensorManager.unregisterListener(mSensorListener);
 
         mSensorListener = new MySensorEventListener();
-        boolean result;
-        result = mSensorManager.registerListener(mSensorListener, mAccSensor, mEventListenerSampleRate);
-        if (!result) {
-            Log.d("megacreep", "Acc not supported");
-        }
-        result = mSensorManager.registerListener(mSensorListener, mMagSensor, mEventListenerSampleRate);
-        if (!result) {
-            Log.d("megacreep", "Mag not supported");
-        }
-        result = mSensorManager.registerListener(mSensorListener, mRotationSensor, mEventListenerSampleRate);
-        if (!result) {
-            Log.d("megacreep", "Rotation not supported");
-        }
-//        result = mSensorManager.registerListener(mSensorListener, mGyroscopeSensor, mEventListenerSampleRate);
-//        if (!result) {
-//            Log.d("megacreep", "Gyroscope not supported");
-//        }
 
-        if (mStepSensor == null) {
-            mTextViewStep.setText("Not Supported");
-        } else {
-            result =mSensorManager.registerListener(mSensorListener, mStepSensor, SensorManager.SENSOR_DELAY_UI);
-            if (!result) {
-                Log.d("megacreep", "Step not supported");
+        prepareDataFiles();
+
+        for (Sensor sensor: mSensorList) {
+            int rate = mEventListenerSampleRate;
+            if (sensor.getType() == Sensor.TYPE_STEP_DETECTOR ||
+                    sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
+                rate = SensorManager.SENSOR_DELAY_UI;
             }
+            mSensorManager.registerListener(mSensorListener, sensor, rate);
         }
 
-        if (mStepDetectorSensor == null) {
-            mTextViewStepDetector.setText("Not Supported");
-        } else {
-            result = mSensorManager.registerListener(mSensorListener, mStepDetectorSensor, SensorManager.SENSOR_DELAY_UI);
-            if (!result) {
-                Log.d("megacreep", "Step Detector not supported");
-            }
+        if (mStepDetector != null) {
+            mStepDetector.start();
         }
-
         mStartTime = System.nanoTime();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        rebindListener();
-        mStepDetector.start();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
+    private void stop() {
         if (mSensorListener != null) {
             mSensorManager.unregisterListener(mSensorListener);
             mSensorListener = null;
         }
+        if (mStepDetector != null) {
+            mStepDetector.stop();
+        }
+        closeDateFiles();
+    }
 
-        mStepDetector.stop();
+    private void prepareDataFiles() {
+        closeDateFiles();
+
+        mDataFileWriters.clear();
+        String prefix = DateFormat.format("MM-dd-hh-mm-ss-", System.currentTimeMillis()).toString();
+        for (Sensor sensor : mSensorList) {
+            try {
+                mDataFileWriters.put(sensor,
+                        new FileUtils.CSVFileWriter(getApplicationContext(), prefix + sensor.getName()));
+            } catch (IOException e) {
+                Log.e("megacreep", "can't create writer for " + sensor.getName());
+            }
+        }
+    }
+
+    private void closeDateFiles(){
+        for (FileUtils.CSVFileWriter fw : mDataFileWriters.values()) {
+            try {
+                fw.close();
+            } catch (IOException e) {
+                Log.e("megacreep", "can't close file");
+            }
+        }
     }
 
     private class MySensorEventListener implements SensorEventListener {
@@ -201,6 +239,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
+            try {
+                mDataFileWriters.get(event.sensor).writeEvent(event);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d("megacreep", "can't write data file");
+            }
             switch (event.sensor.getType()) {
                 case Sensor.TYPE_ACCELEROMETER:
                     if (mLastTimestamp != 0) {

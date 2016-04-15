@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BlindTrainer.iml" filepath="$PROJECT_DIR$/BlindTrainer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SenserTest.iml" filepath="$PROJECT_DIR$/SenserTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -226,4 +226,21 @@
             android:layout_marginLeft="17dp"
             android:layout_marginStart="17dp"/>
     </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:paddingTop="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:background="#aaaaaa" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn="Stop"
+        android:textOff="Start"
+        android:id="@+id/btnControl" />
+
 </LinearLayout>
