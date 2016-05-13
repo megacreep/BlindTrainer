@@ -1,0 +1,23 @@
+#
+# generated on 2016/05/13 12:03:33
+#
+# --table-start--
+dataClass=com.megacreep.sensertest.dao.Account
+tableName=Account
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=name
+# --field-end--
+# --field-start--
+fieldName=age
+# --field-end--
+# --field-start--
+fieldName=gender
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
