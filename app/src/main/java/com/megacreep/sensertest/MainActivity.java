@@ -1,5 +1,9 @@
 package com.megacreep.sensertest;
 
+import android.animation.Keyframe;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -10,6 +14,7 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -44,9 +49,15 @@ public class MainActivity extends AppCompatActivity {
 
     private StepDetector mStepDetector;
     private StepDetectorListener mStepDetectorListener = new StepDetectorListener() {
+
         @Override
         public void onStepEvent() {
-            mPlayer.next();
+            if (mPlayer != null) {
+                mPlayer.next();
+                if (!mAnimator.isRunning()) {
+                    mAnimator.start();
+                }
+            }
         }
     };
 
@@ -60,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextViewStepDetector;
     private TextView mTextViewRotation;
     private TextView mTextViewAngular;
+
+    private RelativeLayout mMaskLayout;
+    private ObjectAnimator mAnimator;
 
     private CompoundButton.OnCheckedChangeListener mControlListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
@@ -93,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
         mTextViewStepDetector = (TextView) this.findViewById(R.id.tvStepDetector);
         mTextViewRotation = (TextView) this.findViewById(R.id.tvRotation);
         mTextViewAngular = (TextView) this.findViewById(R.id.tvAngular);
+
+        mMaskLayout = (RelativeLayout) this.findViewById(R.id.layoutMask);
 
         ToggleButton btnControl = (ToggleButton) this.findViewById(R.id.btnControl);
         btnControl.setOnCheckedChangeListener(mControlListener);
@@ -131,6 +147,15 @@ public class MainActivity extends AppCompatActivity {
                         17, 17, 16, 16, 14, 14, 12,
                 }
         );
+
+
+        Keyframe kf1 = Keyframe.ofFloat(0f, 0f);
+        Keyframe kf2 = Keyframe.ofFloat(0.5f, 0.5f);
+        Keyframe kf3 = Keyframe.ofFloat(0.7f, 0f);
+        mMaskLayout.setAlpha(0f);
+        PropertyValuesHolder holder = PropertyValuesHolder.ofKeyframe("alpha", kf1, kf2, kf3);
+        mAnimator = ObjectAnimator.ofPropertyValuesHolder(mMaskLayout, holder);
+        mAnimator.setDuration(800);
     }
 
     private void prepareSensors() {

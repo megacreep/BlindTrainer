@@ -19,7 +19,7 @@ public class FileUtils {
 
     public static BufferedWriter createFileWriter(Context context, String name) throws IOException {
         File dir = new File(Environment.getExternalStorageDirectory(), "data");
-        if (!dir.isDirectory()) {
+        if (!dir.exists()) {
             dir.mkdirs();
         }
         return new BufferedWriter(new FileWriter(new File(dir, name)));
