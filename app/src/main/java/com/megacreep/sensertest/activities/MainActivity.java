@@ -1,4 +1,4 @@
-package com.megacreep.sensertest;
+package com.megacreep.sensertest.activities;
 
 import android.animation.Keyframe;
 import android.animation.ObjectAnimator;
@@ -19,6 +19,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.megacreep.sensertest.R;
 import com.megacreep.sensertest.media.MusicPlayer;
 import com.megacreep.sensertest.sensor.StepDetector;
 import com.megacreep.sensertest.sensor.StepDetectorListener;

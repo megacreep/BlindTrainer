@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SenserTest</string>
+    <string name="app_name">TUNE</string>
     <string name="label_linear_acc">LinearAcc:</string>
     <string name="placeholder">placeholder</string>
     <string name="label_distance">distance</string>
@@ -10,4 +10,5 @@
     <string name="label_step_detector">Step by Detector</string>
     <string name="label_rotation">Rotation</string>
     <string name="label_angular">Angular speed</string>
+    <string name="title_activity_login">LoginActivity</string>
 </resources>
