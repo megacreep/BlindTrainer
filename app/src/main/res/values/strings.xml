@@ -11,4 +11,17 @@
     <string name="label_rotation">Rotation</string>
     <string name="label_angular">Angular speed</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="action_home">Home</string>
+    <string name="action_task">Task</string>
+    <string name="action_history">History</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="welcome">Hi, Guest</string>
+    <string name="slogan">Let\'s Train !</string>
+    <string name="description">Here\'re recommendations for you</string>
+    <string name="more">More Games ▶</string>
 </resources>
