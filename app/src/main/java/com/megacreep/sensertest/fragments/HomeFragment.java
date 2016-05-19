@@ -15,16 +15,12 @@ import com.megacreep.sensertest.R;
 
 public class HomeFragment extends Fragment {
 
+    private OnFragmentInteractionListener mListener;
+
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment HomeFragment.
-     */
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -47,7 +43,7 @@ public class HomeFragment extends Fragment {
         view.findViewById(R.id.btnTask1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("megacreep", "fuck");
+                mListener.onButtonClicked(v);
             }
         });
 
@@ -55,7 +51,7 @@ public class HomeFragment extends Fragment {
         tvMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("megacreep", "navigate to next");
+                mListener.onButtonClicked(v);
             }
         });
 
@@ -65,10 +61,21 @@ public class HomeFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onButtonClicked(View v);
     }
 }

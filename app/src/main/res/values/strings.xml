@@ -24,4 +24,6 @@
     <string name="slogan">Let\'s Train !</string>
     <string name="description">Here\'re recommendations for you</string>
     <string name="more">More Games ▶</string>
+    <string name="task_description_1">Life is not easy for any of us. We must work, and above all we must believe in ourselves. We must believe that each of us is able to do something well and that.</string>
+    <string name="title_activity_result">ResultActivity</string>
 </resources>

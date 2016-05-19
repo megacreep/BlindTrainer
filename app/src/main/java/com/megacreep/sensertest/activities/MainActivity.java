@@ -1,5 +1,6 @@
 package com.megacreep.sensertest.activities;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,7 +25,7 @@ import com.megacreep.sensertest.fragments.HistoryFragment;
 import com.megacreep.sensertest.fragments.HomeFragment;
 import com.megacreep.sensertest.fragments.TaskFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -79,6 +80,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onButtonClicked(View v) {
+        switch (v.getId()) {
+            case R.id.btnTask1:
+                Intent intent = new Intent(this, TaskActivity.class);
+                this.startActivity(intent);
+                return;
+            case R.id.tvMore:
+                mViewPager.setCurrentItem(1);
+                return;
+            default:
+                return;
+        }
     }
 
     /**
