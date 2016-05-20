@@ -2,8 +2,11 @@ package com.megacreep.sensertest.media;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.os.Handler;
 
 import com.megacreep.sensertest.R;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This class provide the functionality of playing a
@@ -23,9 +26,9 @@ public class MusicPlayer {
 
     private Context mContext;
     private int[] mNotes;
-    private int mCurrentNote = 0;
+    private AtomicInteger mCurrentNote = new AtomicInteger(0);
 
-    private MediaPlayer mPlayer;
+    private Handler mHandler = new Handler();
 
     public MusicPlayer(Context context, int[] notes) {
         this.mContext = context;
@@ -34,28 +37,24 @@ public class MusicPlayer {
 
 
     public void next() {
-        if (mPlayer != null && mPlayer.isPlaying()) {
-            return;
-        }
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                int note = mNotes[mCurrentNote.get()];
+                if (note >= SOUND_MAPPING.length) {
+                    return;
+                }
 
-        if (mPlayer != null) {
-            mPlayer.stop();
-            mPlayer.release();
-        }
-
-        int note = mNotes[mCurrentNote];
-        if (note >= SOUND_MAPPING.length) {
-            return;
-        }
-
-        mPlayer = MediaPlayer.create(mContext, SOUND_MAPPING[note]);
-        if (mPlayer != null) {
-            mPlayer.start();
-            mCurrentNote = (mCurrentNote + 1) % mNotes.length;
-        }
+                MediaPlayer player = MediaPlayer.create(mContext, SOUND_MAPPING[note]);
+                if (player != null) {
+                    player.start();
+                    mCurrentNote.set((mCurrentNote.get() + 1) % mNotes.length);
+                }
+            }
+        });
     }
 
     public void reset() {
-        this.mCurrentNote = 0;
+        mCurrentNote.set(0);
     }
 }

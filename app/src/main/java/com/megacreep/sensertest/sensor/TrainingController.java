@@ -4,6 +4,7 @@ import android.content.Context;
 import android.hardware.SensorManager;
 import android.util.Log;
 
+import com.megacreep.sensertest.media.BluetoothController;
 import com.megacreep.sensertest.media.MusicPlayer;
 
 /**
@@ -31,10 +32,15 @@ public class TrainingController {
             if (mPlayer != null) {
                 mPlayer.next();
             }
+            if (mBluetoothController != null) {
+                mBluetoothController.vibrate(1);
+            }
         }
     };
 
     private MusicPlayer mPlayer;
+
+    private BluetoothController mBluetoothController;
 
     private static TrainingController mInstance;
 
@@ -56,6 +62,7 @@ public class TrainingController {
                         17, 17, 16, 16, 14, 14, 12,
                 }
         );
+        mBluetoothController = BluetoothController.getInstance(context);
 
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 
@@ -72,6 +79,7 @@ public class TrainingController {
                 mStepDetector.addStepListener(mNoteOnStepListener);
             }
             mStepDetector.start();
+            mBluetoothController.connect();
         }
     }
 
