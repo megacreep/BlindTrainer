@@ -1,0 +1,255 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="18dp"
+    tools:context="com.megacreep.sensertest.fragments.HistoryFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/container_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+            <TextView
+                android:text="Vibrator 1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <SeekBar
+                android:layout_height="wrap_content"
+                android:id="@+id/sb_vibrator_1"
+                android:max="255"
+                android:layout_weight="1"
+                android:layout_width="0dp" />
+
+            <TextView
+                android:id="@+id/tv_vibrator_1"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+            <TextView
+                android:text="Vibrator 2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <SeekBar
+                android:layout_height="wrap_content"
+                android:id="@+id/sb_vibrator_2"
+                android:max="255"
+                android:layout_weight="1"
+                android:layout_width="0dp" />
+
+            <TextView
+                android:id="@+id/tv_vibrator_2"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+            <TextView
+                android:text="Vibrator 3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <SeekBar
+                android:layout_height="wrap_content"
+                android:id="@+id/sb_vibrator_3"
+                android:max="255"
+                android:layout_weight="1"
+                android:layout_width="0dp" />
+
+            <TextView
+                android:id="@+id/tv_vibrator_3"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+            <TextView
+                android:text="Vibrator 4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <SeekBar
+                android:layout_height="wrap_content"
+                android:id="@+id/sb_vibrator_4"
+                android:max="255"
+                android:layout_weight="1"
+                android:layout_width="200dp" />
+
+            <TextView
+                android:id="@+id/tv_vibrator_4"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+            <TextView
+                android:text="Vibrator 5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <SeekBar
+                android:layout_height="wrap_content"
+                android:id="@+id/sb_vibrator_5"
+                android:max="255"
+                android:layout_weight="1"
+                android:layout_width="0dp" />
+
+            <TextView
+                android:id="@+id/tv_vibrator_5"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+            <TextView
+                android:text="Vibrator 6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <SeekBar
+                android:layout_height="wrap_content"
+                android:id="@+id/sb_vibrator_6"
+                android:max="255"
+                android:layout_weight="1"
+                android:layout_width="0dp" />
+
+            <TextView
+                android:id="@+id/tv_vibrator_6"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+            <TextView
+                android:text="Vibrator 7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <SeekBar
+                android:layout_height="wrap_content"
+                android:id="@+id/sb_vibrator_7"
+                android:max="255"
+                android:layout_weight="1"
+                android:layout_width="0dp" />
+
+            <TextView
+                android:id="@+id/tv_vibrator_7"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+            <TextView
+                android:text="Vibrator 8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <SeekBar
+                android:layout_height="wrap_content"
+                android:id="@+id/sb_vibrator_8"
+                android:max="255"
+                android:layout_weight="1"
+                android:layout_width="0dp" />
+
+            <TextView
+                android:id="@+id/tv_vibrator_8"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btn_command_send"
+            android:text="Send"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:background="@drawable/bg_dark"
+            android:elevation="4dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_command_stop"
+            android:text="Stop"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:background="@drawable/bg_dark"
+            android:elevation="4dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</RelativeLayout>

@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.megacreep.sensertest.R;
 import com.megacreep.sensertest.fragments.HistoryFragment;
 import com.megacreep.sensertest.fragments.HomeFragment;
+import com.megacreep.sensertest.fragments.SettingsFragment;
 import com.megacreep.sensertest.fragments.TaskFragment;
 
 public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener {
@@ -151,6 +152,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
                     return TaskFragment.newInstance();
                 case 2:
                     return HistoryFragment.newInstance();
+                case 3:
+                    return SettingsFragment.newInstance();
                 default:
                     return PlaceholderFragment.newInstance(999);
             }
@@ -159,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 4;
         }
 
 
@@ -172,6 +175,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
                     return "Task";
                 case 2:
                     return "History";
+                case 3:
+                    return "Settings";
             }
             return null;
         }

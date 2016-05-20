@@ -16,6 +16,7 @@ public class TrainingController {
         void onGaitScoreChanged(float score);
         void onDirectionalScoreChanged(float score, boolean isLeft);
         void onBalanceScoreChanged(float score);
+        void onStepChanged(int value);
         void onTrainingFinished(boolean success);
     }
 
@@ -26,6 +27,7 @@ public class TrainingController {
 
     private StepDetector mStepDetector;
     private StepDetectorListener mNoteOnStepListener = new StepDetectorListener() {
+        private int stepCounter = 0;
 
         @Override
         public void onStepEvent() {
@@ -35,6 +37,7 @@ public class TrainingController {
             if (mBluetoothController != null) {
                 mBluetoothController.vibrate(1);
             }
+            mListener.onStepChanged(++stepCounter);
         }
     };
 

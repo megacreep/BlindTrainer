@@ -9,19 +9,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.megacreep.sensertest.R;
+import com.megacreep.sensertest.media.MusicPlayer;
 import com.megacreep.sensertest.sensor.TrainingController;
 
 public class MonitorActivity extends AppCompatActivity implements TrainingController.OnTrainingEventController {
 
-    TextView mTvGait;
+    private TextView mTvGait;
 
-    TextView mTvDirection;
-    ImageView mImageLeft;
-    ImageView mImageRight;
+    private TextView mTvDirection;
+    private ImageView mImageLeft;
+    private ImageView mImageRight;
 
-    TextView mTvBalance;
+    private TextView mTvBalance;
 
-    TrainingController mController;
+    private TextView mTvStep;
+
+    private TrainingController mController;
+    private MediaPlayer mCountdownPlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,27 +43,30 @@ public class MonitorActivity extends AppCompatActivity implements TrainingContro
         mImageLeft = (ImageView) this.findViewById(R.id.arrLeft);
         mImageRight = (ImageView) this.findViewById(R.id.arrRight);
         mTvBalance = (TextView) this.findViewById(R.id.tvBalance);
+        mTvStep = (TextView) this.findViewById(R.id.tvStep);
     }
 
     private void startCountDown() {
-        MediaPlayer player = MediaPlayer.create(this, R.raw.audio_start);
-        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        mCountdownPlayer = MediaPlayer.create(this, R.raw.audio_start);
+        mCountdownPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 startTraining();
             }
         });
-        player.start();
+        mCountdownPlayer.start();
     }
 
     private void startTraining() {
         mController = TrainingController.getInstance(this, this);
         mController.start(true);
+        mCountdownPlayer.release();
+        mCountdownPlayer = null;
     }
 
     @Override
     public void onGaitScoreChanged(float score) {
-        mTvDirection.setText(String.format("%.2f", score));
+        mTvGait.setText(String.format("%.2f", score));
     }
 
     @Override
@@ -79,6 +87,11 @@ public class MonitorActivity extends AppCompatActivity implements TrainingContro
     }
 
     @Override
+    public void onStepChanged(int value) {
+        mTvStep.setText(String.valueOf(value));
+    }
+
+    @Override
     public void onTrainingFinished(boolean success) {
         if (success) {
             Intent intent = new Intent(this, ResultActivity.class);
@@ -92,6 +105,10 @@ public class MonitorActivity extends AppCompatActivity implements TrainingContro
         super.onBackPressed();
         if (mController != null) {
             mController.abort();
+        }
+        if (mCountdownPlayer != null) {
+            mCountdownPlayer.stop();
+            mCountdownPlayer.release();
         }
     }
 }

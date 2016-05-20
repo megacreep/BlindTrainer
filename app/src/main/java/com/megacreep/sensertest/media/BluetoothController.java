@@ -80,7 +80,7 @@ public class BluetoothController {
         sendCommand(COMMAND_STOP);
     }
 
-    private void sendCommand(byte[] command) {
+    public void sendCommand(byte[] command) {
         if (mCurrentStatus == STATUS_OFF || mWriteThread == null) {
             return;
         }
@@ -88,9 +88,11 @@ public class BluetoothController {
     }
 
     public void close() {
-        mWriteThread.cancel();
+        if (mWriteThread != null) {
+            mWriteThread.cancel();
+        }
+        mCurrentStatus = STATUS_OFF;
     }
-
 
     private class ConnectThread extends Thread {
         private final BluetoothSocket mmSocket;
